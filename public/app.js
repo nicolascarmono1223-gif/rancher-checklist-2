@@ -1,4 +1,4 @@
-import { SLIMES, RESOURCES, ZONES, FOODS, PORTS, RECIPES } from "./data.js";
+import { SLIMES, RESOURCES, ZONES, FOOD_GROUPS, FOODS, PORTS, RECIPES } from "./data.js";
 
 const STORAGE_KEY = "ranchoSlime.v3";
 const LEGACY_KEY = "rancherChecklist2";
@@ -22,6 +22,7 @@ const els = {
   resourcesCount: $("#resourcesCount"),
   foodList: $("#foodList"),
   foodCount: $("#foodCount"),
+  foodFoot: $("#foodFoot"),
   portList: $("#portList"),
   portsCount: $("#portsCount"),
   largoList: $("#largoList"),
@@ -166,6 +167,12 @@ const emptyState = (icon, title, text) => `
 
 const riskTag = (risk) => `<span class="tag risk--${risk.toLowerCase()}">Riesgo ${risk.toLowerCase()}</span>`;
 
+const dietLabel = (slime) => {
+  if (slime.food === "No come") return "No come nada";
+  if (slime.food === "Cualquier comida") return "Come cualquier comida";
+  return `Come ${slime.food.toLowerCase()}`;
+};
+
 const checkIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7"></path></svg>`;
 
 const chevron = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"></path></svg>`;
@@ -220,7 +227,7 @@ function renderOverview() {
       tone: nextSlime.tone,
       slimeId: nextSlime.id,
       title: `Captura al ${nextSlime.name}`,
-      meta: `Riesgo ${nextSlime.risk.toLowerCase()} · come ${nextSlime.food.toLowerCase()}`,
+      meta: `Riesgo ${nextSlime.risk.toLowerCase()} · ${dietLabel(nextSlime).toLowerCase()}`,
       tab: "slimes",
     });
   }
@@ -329,7 +336,7 @@ function slimeCard(slime) {
       ${slimeAvatar(slime)}
       <div class="card-title">
         <h3>${slime.name}</h3>
-        <p class="meta meta--ico">${ICON.food}Come ${slime.food.toLowerCase()}</p>
+        <p class="meta meta--ico">${ICON.food}${dietLabel(slime)}</p>
       </div>
       <span class="status ${done ? "is-ok" : ""}">${done ? "Capturado" : "Pendiente"}</span>
     </div>
@@ -367,7 +374,7 @@ function renderSlimeFilters() {
 function renderSlimes() {
   const query = els.slimeSearch.value.trim().toLowerCase();
   const filtered = SLIMES.filter((slime) => {
-    const haystack = [slime.name, slime.food, slime.favorite, slime.plort, slime.special, slime.zone].join(" ").toLowerCase();
+    const haystack = [slime.name, dietLabel(slime), slime.favorite, slime.plort, slime.special, slime.zone].join(" ").toLowerCase();
     const matchesQuery = !query || haystack.includes(query);
     const matchesFilter = ui.slimeFilter === "todos"
       || (ui.slimeFilter === "capturados" ? state.slimes[slime.id] : !state.slimes[slime.id]);
@@ -446,24 +453,41 @@ function foodCard(food) {
         <h3>${food.name}</h3>
         <p class="meta meta--ico">${ICON.place}${food.where}</p>
       </div>
-      <span class="status">${slimes.length} ${slimes.length === 1 ? "slime" : "slimes"}</span>
+      <span class="status ${slimes.length ? "is-ok" : ""}">${slimes.length
+        ? `${slimes.length} ${slimes.length === 1 ? "favorito" : "favoritos"}`
+        : "Sin favorito"}</span>
     </div>
-    <p class="food-summary">${food.summary}</p>
-    <dl class="facts">
-      <div><dt>${ICON.star}Favoritos</dt><dd>${food.favorites}</dd></div>
-    </dl>
-    <div class="food-slimes">
-      <span class="food-slimes-label">La comen</span>
-      <div class="slime-chips">
-        ${slimes.map((slime) => `<span class="slime-chip">${slimeImg(slime)}${slime.name}</span>`).join("")}
-      </div>
-    </div>
+    <p class="food-summary">${food.note}</p>
+    ${slimes.length
+      ? `<div class="food-slimes">
+          <span class="food-slimes-label">${ICON.star}Favorito de</span>
+          <div class="slime-chips">
+            ${slimes.map((slime) => `<span class="slime-chip">${slimeImg(slime)}${slime.name}</span>`).join("")}
+          </div>
+        </div>`
+      : ""}
   </article>`;
 }
 
 function renderFoods() {
-  els.foodCount.textContent = `${FOODS.length} tipos`;
-  els.foodList.innerHTML = FOODS.map(foodCard).join("");
+  const favorites = FOODS.reduce((sum, food) => sum + food.slimes.length, 0);
+  els.foodCount.textContent = `${FOODS.length} alimentos`;
+  els.foodList.innerHTML = FOOD_GROUPS.map((group) => {
+    const items = FOODS.filter((food) => food.group === group.id);
+    if (!items.length) return "";
+    return `<section class="food-group">
+      <div class="food-group-head">
+        <span class="avatar" style="--tone:${group.tone}" aria-hidden="true">${group.emoji}</span>
+        <div class="food-group-copy">
+          <h3>${group.name}</h3>
+          <p>${group.summary}</p>
+        </div>
+        <span class="pill">${items.length}</span>
+      </div>
+      ${items.map(foodCard).join("")}
+    </section>`;
+  }).join("");
+  if (els.foodFoot) els.foodFoot.textContent = `${favorites} comidas favoritas repartidas entre los slimes.`;
 }
 
 /* -------------------------------- Puertos --------------------------------- */

@@ -1,9 +1,12 @@
-const CACHE_NAME = "rancho-slime-v3";
+const CACHE_NAME = "rancho-slime-v4";
 const FILES = [
   "./", "./index.html", "./styles.css", "./app.js", "./data.js", "./manifest.json", "./icon.png", "./icon.svg",
   "./slimes/pink.svg", "./slimes/cotton.svg", "./slimes/tabby.svg", "./slimes/phosphor.svg", "./slimes/angler.svg",
   "./slimes/batty.svg", "./slimes/crystal.svg", "./slimes/rock.svg", "./slimes/honey.svg", "./slimes/hunter.svg",
-  "./slimes/flutter.svg", "./slimes/boom.svg", "./slimes/puddle.svg", "./slimes/ringtail.svg"
+  "./slimes/flutter.svg", "./slimes/boom.svg", "./slimes/puddle.svg", "./slimes/ringtail.svg",
+  "./slimes/saber.svg", "./slimes/yolky.svg", "./slimes/tangle.svg", "./slimes/dervish.svg", "./slimes/fire.svg",
+  "./slimes/sloomber.svg", "./slimes/hyper.svg", "./slimes/twin.svg", "./slimes/shadow.svg", "./slimes/gold.svg",
+  "./slimes/lucky.svg"
 ];
 
 self.addEventListener("install", (event) => {
