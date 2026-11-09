@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img">
+  <defs>
+    <linearGradient id="body" x1="34" y1="34" x2="88" y2="92" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#b8f6ff"/>
+      <stop offset="1" stop-color="#4cc6ea"/>
+    </linearGradient>
+    <filter id="lure" x="-120%" y="-120%" width="340%" height="340%">
+      <feGaussianBlur stdDeviation="5"/>
+    </filter>
+  </defs>
+  <ellipse cx="60" cy="97" rx="30" ry="6" fill="#000" opacity=".2"/>
+  <path d="M58 34c-2-10 4-16 12-16h6" fill="none" stroke="#2e8fa8" stroke-width="3.4" stroke-linecap="round"/>
+  <circle cx="80" cy="18" r="9" fill="#d9ff7a" opacity=".8" filter="url(#lure)"/>
+  <circle cx="80" cy="18" r="4.4" fill="#f0ffb8"/>
+  <path d="M60 30c-21 0-36 17.5-36 37.5 0 12 7.5 20.5 18.5 20.5h35C88.5 88 96 79.5 96 67.5 96 47.5 81 30 60 30Z" fill="url(#body)"/>
+  <path d="M60 30c-5-5-12-7-17-4 3 6 9 9 17 11Z" fill="#2e9fc4"/>
+  <ellipse cx="44" cy="49" rx="10" ry="6" fill="#fff" opacity=".4" transform="rotate(-24 44 49)"/>
+  <path d="M42 57l9 3M78 57l-9 3" fill="none" stroke="#134455" stroke-width="2.8" stroke-linecap="round"/>
+  <ellipse cx="48" cy="66" rx="4.6" ry="5.8" fill="#0f3446"/>
+  <ellipse cx="72" cy="66" rx="4.6" ry="5.8" fill="#0f3446"/>
+  <circle cx="49.6" cy="64" r="1.6" fill="#c9f7ff"/>
+  <circle cx="73.6" cy="64" r="1.6" fill="#c9f7ff"/>
+  <path d="M52 75l4 5 4-5 4 5 4-5" fill="none" stroke="#0f3446" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+</svg>

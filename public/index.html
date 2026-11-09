@@ -72,6 +72,21 @@
       <div class="grid" id="slimeList"></div>
     </section>
 
+    <section class="view" id="view-comida" data-view="comida" aria-labelledby="title-comida" hidden>
+      <div class="section-head">
+        <div class="section-title">
+          <h2 id="title-comida">Comida</h2>
+          <span class="pill" id="foodCount">0</span>
+        </div>
+        <p>Qué come cada slime y dónde conseguir su comida.</p>
+      </div>
+      <div class="panel panel--tip">
+        <span class="tip-icon" aria-hidden="true">🍽️</span>
+        <p><b>Su favorito duplica los plorts.</b> Alimenta a cada slime con su comida favorita para sacar más provecho.</p>
+      </div>
+      <div class="grid" id="foodList"></div>
+    </section>
+
     <section class="view" id="view-recursos" data-view="recursos" aria-labelledby="title-recursos" hidden>
       <div class="section-head">
         <div class="section-title">
@@ -150,6 +165,10 @@
       <button class="tab" type="button" data-act="go" data-tab="slimes">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.2c-4.6 0-8.2 3.9-8.2 8.6 0 2 .9 3.4 2.4 3.4h11.6c1.5 0 2.4-1.4 2.4-3.4 0-4.7-3.6-8.6-8.2-8.6Z"></path><circle cx="9.2" cy="12" r="1" fill="currentColor" stroke="none"></circle><circle cx="14.8" cy="12" r="1" fill="currentColor" stroke="none"></circle></svg>
         <span>Slimes</span>
+      </button>
+      <button class="tab" type="button" data-act="go" data-tab="comida">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8.2C9.6 5.8 5 7.2 5 11.8c0 3.6 2.7 7 7 8.2 4.3-1.2 7-4.6 7-8.2 0-4.6-4.6-6-7-3.6Z"></path><path d="M12 8V4.5"></path><path d="M12 4.5c1.6 0 2.7.9 3.2 2.1"></path></svg>
+        <span>Comida</span>
       </button>
       <button class="tab" type="button" data-act="go" data-tab="recursos">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5Z"></path><path d="m3 13 9 5 9-5"></path></svg>

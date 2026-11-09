@@ -458,6 +458,22 @@ main { display: block; }
 
 .avatar--lg { width: 54px; height: 54px; font-size: 26px; border-radius: 17px; }
 
+.avatar--art { padding: 3px; background: rgb(var(--tone, 148 176 222) / 0.1); }
+
+.slime-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35));
+}
+
+.ico { width: 13px; height: 13px; flex: 0 0 auto; opacity: 0.8; }
+
+.meta--ico { display: flex; align-items: center; gap: 5px; }
+
+.facts--3 > div:last-child { grid-column: 1 / -1; }
+
 .avatar-stack { display: flex; flex: 0 0 auto; }
 
 .avatar-stack .avatar + .avatar {
@@ -612,6 +628,9 @@ main { display: block; }
 .facts div { min-width: 0; }
 
 .facts dt {
+  display: flex;
+  align-items: center;
+  gap: 5px;
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.1em;
@@ -775,6 +794,41 @@ main { display: block; }
 .empty-icon { display: block; margin-bottom: 10px; font-size: 34px; }
 .empty h3 { margin: 0 0 4px; color: var(--text); font-size: 16px; }
 .empty p { margin: 0; font-size: 13.5px; }
+
+/* ---------------------------------- Comida --------------------------------- */
+
+.food-summary { margin: 12px 0 0; font-size: 13px; line-height: 1.55; color: var(--muted); }
+
+.food-card .facts { margin-top: 11px; }
+
+.food-slimes { margin-top: 13px; padding-top: 12px; border-top: 1px solid var(--line); }
+
+.food-slimes-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+}
+
+.slime-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.slime-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 4px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--muted);
+  font-size: 11.5px;
+  font-weight: 700;
+}
+
+.slime-chip .slime-img { width: 22px; height: 22px; flex: 0 0 auto; filter: none; }
 
 /* ---------------------------------- Largos --------------------------------- */
 
@@ -989,7 +1043,7 @@ main { display: block; }
 
 .tabbar-inner {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   max-width: 1040px;
   margin: 0 auto;
   padding: 8px 6px 7px;
@@ -999,19 +1053,19 @@ main { display: block; }
   display: grid;
   justify-items: center;
   gap: 4px;
-  padding: 7px 2px;
+  padding: 7px 1px;
   border: 0;
   border-radius: 12px;
   background: transparent;
   color: var(--muted-2);
   font: inherit;
-  font-size: 10.5px;
+  font-size: 9.5px;
   font-weight: 700;
   cursor: pointer;
   transition: color 0.15s, background 0.15s;
 }
 
-.tab svg { width: 23px; height: 23px; }
+.tab svg { width: 22px; height: 22px; }
 
 .tab:hover { color: var(--muted); background: rgba(255, 255, 255, 0.03); }
 

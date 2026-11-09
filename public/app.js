@@ -1,9 +1,9 @@
-import { SLIMES, RESOURCES, ZONES, PORTS, RECIPES } from "./data.js";
+import { SLIMES, RESOURCES, ZONES, FOODS, PORTS, RECIPES } from "./data.js";
 
 const STORAGE_KEY = "ranchoSlime.v3";
 const LEGACY_KEY = "rancherChecklist2";
 const RISK_ORDER = { Bajo: 0, Medio: 1, Alto: 2 };
-const VIEWS = ["inicio", "slimes", "recursos", "puertos", "largos"];
+const VIEWS = ["inicio", "slimes", "comida", "recursos", "puertos", "largos"];
 
 // Nombres que usaba la versión anterior; sirven para migrar el progreso guardado.
 const OLD_RESOURCES = ["Magma Comb", "Tin Petal", "Black Indigonium", "Aqua Glass", "Dream Bubble", "Royal Jelly", "Silky Sand", "Drift Crystal", "Lightning Mote", "Perfect Snowflake", "Slime Fossil"];
@@ -20,6 +20,8 @@ const els = {
   resourceList: $("#resourceList"),
   resourceFilters: $("#resourceFilters"),
   resourcesCount: $("#resourcesCount"),
+  foodList: $("#foodList"),
+  foodCount: $("#foodCount"),
   portList: $("#portList"),
   portsCount: $("#portsCount"),
   largoList: $("#largoList"),
@@ -168,6 +170,17 @@ const checkIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" st
 
 const chevron = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"></path></svg>`;
 
+const ICON = {
+  food: `<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v7a2 2 0 0 0 4 0V3"></path><path d="M9 10v11"></path><path d="M17 3c-1.8 2-2 4.6-2 6.5 0 1.6 1 2.5 2.5 2.5V21"></path></svg>`,
+  plort: `<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 7 7-7 11-7-11 7-7Z"></path><path d="M5 10h14"></path></svg>`,
+  place: `<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11Z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>`,
+  star: `<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1L3.2 9.5l6.1-.9L12 3Z"></path></svg>`,
+};
+
+const slimeImg = (slime, extra = "") => `<img class="slime-img ${extra}" src="slimes/${slime.id}.svg" alt="" width="64" height="64">`;
+
+const slimeAvatar = (slime, extra = "") => `<span class="avatar avatar--art ${extra}" style="--tone:${slime.tone}" aria-hidden="true">${slimeImg(slime)}</span>`;
+
 /* -------------------------------- Resumen --------------------------------- */
 
 function tile(icon, label, done, total, tab) {
@@ -181,8 +194,12 @@ function tile(icon, label, done, total, tab) {
 }
 
 function suggestionRow(item) {
+  const slime = item.slimeId ? SLIMES.find((entry) => entry.id === item.slimeId) : null;
+  const art = slime
+    ? slimeAvatar(slime)
+    : `<span class="avatar" style="--tone:${item.tone}" aria-hidden="true">${item.emoji}</span>`;
   return `<button class="sug" type="button" data-act="go" data-tab="${item.tab}">
-    <span class="avatar" style="--tone:${item.tone}" aria-hidden="true">${item.emoji}</span>
+    ${art}
     <span class="sug-body">
       <span class="sug-title">${item.title}</span>
       <span class="sug-meta">${item.meta}</span>
@@ -201,6 +218,7 @@ function renderOverview() {
     suggestions.push({
       emoji: nextSlime.emoji,
       tone: nextSlime.tone,
+      slimeId: nextSlime.id,
       title: `Captura al ${nextSlime.name}`,
       meta: `Riesgo ${nextSlime.risk.toLowerCase()} · come ${nextSlime.food.toLowerCase()}`,
       tab: "slimes",
@@ -235,6 +253,7 @@ function renderOverview() {
     suggestions.push({
       emoji: a.emoji,
       tone: a.tone,
+      slimeId: a.id,
       title: `Crea el Largo de ${a.name} + ${b.name}`,
       meta: `Necesita: ${nextLargo.need.toLowerCase()}`,
       tab: "largos",
@@ -307,16 +326,17 @@ function slimeCard(slime) {
   const done = state.slimes[slime.id];
   return `<article class="card ${done ? "is-done" : ""}">
     <div class="card-top">
-      <span class="avatar" style="--tone:${slime.tone}" aria-hidden="true">${slime.emoji}</span>
+      ${slimeAvatar(slime)}
       <div class="card-title">
         <h3>${slime.name}</h3>
-        <p class="meta">Come ${slime.food.toLowerCase()}</p>
+        <p class="meta meta--ico">${ICON.food}Come ${slime.food.toLowerCase()}</p>
       </div>
       <span class="status ${done ? "is-ok" : ""}">${done ? "Capturado" : "Pendiente"}</span>
     </div>
-    <dl class="facts">
-      <div><dt>Favorito</dt><dd>${slime.favorite}</dd></div>
-      <div><dt>Plort</dt><dd>${slime.plort}</dd></div>
+    <dl class="facts facts--3">
+      <div><dt>${ICON.star}Favorito</dt><dd>${slime.favorite}</dd></div>
+      <div><dt>${ICON.plort}Plort</dt><dd>${slime.plort}</dd></div>
+      <div><dt>${ICON.place}Lugar</dt><dd>${slime.zone}</dd></div>
     </dl>
     <div class="tags">
       ${riskTag(slime.risk)}
@@ -347,7 +367,7 @@ function renderSlimeFilters() {
 function renderSlimes() {
   const query = els.slimeSearch.value.trim().toLowerCase();
   const filtered = SLIMES.filter((slime) => {
-    const haystack = [slime.name, slime.food, slime.favorite, slime.plort, slime.special].join(" ").toLowerCase();
+    const haystack = [slime.name, slime.food, slime.favorite, slime.plort, slime.special, slime.zone].join(" ").toLowerCase();
     const matchesQuery = !query || haystack.includes(query);
     const matchesFilter = ui.slimeFilter === "todos"
       || (ui.slimeFilter === "capturados" ? state.slimes[slime.id] : !state.slimes[slime.id]);
@@ -374,7 +394,7 @@ function resourceCard(resource) {
       <span class="avatar" style="--tone:${resource.tone}" aria-hidden="true">${resource.emoji}</span>
       <div class="card-title">
         <h3>${resource.name}</h3>
-        <p class="meta">${resource.zone}</p>
+        <p class="meta meta--ico">${ICON.place}${resource.zone}</p>
       </div>
       <span class="status ${done ? "is-ok" : "is-warn"}">${done ? "Completo" : `${value}/${resource.target}`}</span>
     </div>
@@ -413,6 +433,37 @@ function renderResources() {
   renderResourceFilters();
   const list = ui.zone === "Todas" ? RESOURCES : RESOURCES.filter((resource) => resource.zone === ui.zone);
   els.resourceList.innerHTML = list.map(resourceCard).join("");
+}
+
+/* --------------------------------- Comida --------------------------------- */
+
+function foodCard(food) {
+  const slimes = food.slimes.map((id) => SLIMES.find((slime) => slime.id === id)).filter(Boolean);
+  return `<article class="card food-card">
+    <div class="card-top">
+      <span class="avatar" style="--tone:${food.tone}" aria-hidden="true">${food.emoji}</span>
+      <div class="card-title">
+        <h3>${food.name}</h3>
+        <p class="meta meta--ico">${ICON.place}${food.where}</p>
+      </div>
+      <span class="status">${slimes.length} ${slimes.length === 1 ? "slime" : "slimes"}</span>
+    </div>
+    <p class="food-summary">${food.summary}</p>
+    <dl class="facts">
+      <div><dt>${ICON.star}Favoritos</dt><dd>${food.favorites}</dd></div>
+    </dl>
+    <div class="food-slimes">
+      <span class="food-slimes-label">La comen</span>
+      <div class="slime-chips">
+        ${slimes.map((slime) => `<span class="slime-chip">${slimeImg(slime)}${slime.name}</span>`).join("")}
+      </div>
+    </div>
+  </article>`;
+}
+
+function renderFoods() {
+  els.foodCount.textContent = `${FOODS.length} tipos`;
+  els.foodList.innerHTML = FOODS.map(foodCard).join("");
 }
 
 /* -------------------------------- Puertos --------------------------------- */
@@ -454,8 +505,8 @@ function largoCard(recipe) {
   return `<article class="card ${done ? "is-done" : ""}">
     <div class="card-top">
       <span class="avatar-stack" aria-hidden="true">
-        <span class="avatar" style="--tone:${a.tone}">${a.emoji}</span>
-        <span class="avatar" style="--tone:${b.tone}">${b.emoji}</span>
+        ${slimeAvatar(a)}
+        ${slimeAvatar(b)}
       </span>
       <div class="card-title">
         <h3>${a.name} + ${b.name}</h3>
@@ -508,9 +559,9 @@ function analyzeLargo() {
 
     ui.largoResultHtml = `<div class="result result--${risk.toLowerCase()}">
       <div class="result-top">
-        <span class="avatar avatar--lg" style="--tone:${a.tone}" aria-hidden="true">${a.emoji}</span>
+        ${slimeAvatar(a, "avatar--lg")}
         <span class="plus" aria-hidden="true">+</span>
-        <span class="avatar avatar--lg" style="--tone:${b.tone}" aria-hidden="true">${b.emoji}</span>
+        ${slimeAvatar(b, "avatar--lg")}
         ${riskTag(risk)}
       </div>
       <h3>${a.name} + ${b.name}</h3>
@@ -648,6 +699,7 @@ function renderAll() {
   renderGlobal();
   renderOverview();
   renderSlimes();
+  renderFoods();
   renderResources();
   renderPorts();
   renderLargos();
