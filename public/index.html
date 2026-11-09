@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#070d18">
+<meta name="description" content="Rancho Slime: la checklist de Slime Rancher 2 para llevar tus slimes, recursos, puertos y largos. Tu progreso se guarda en tu dispositivo.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Rancho Slime">
+<title>Rancho Slime · Checklist de Slime Rancher 2</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="icon" href="icon.png" sizes="512x512">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+  <header class="appbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 48 48">
+          <defs>
+            <linearGradient id="brandSlime" x1="8" y1="6" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#bcff74"></stop>
+              <stop offset="1" stop-color="#4fd1ff"></stop>
+            </linearGradient>
+          </defs>
+          <path d="M24 7C13.6 7 7 16.4 7 26.5c0 5.3 3.4 8.5 8 8.5h18c4.6 0 8-3.2 8-8.5C41 16.4 34.4 7 24 7Z" fill="url(#brandSlime)"></path>
+          <ellipse cx="17.8" cy="24" rx="2.9" ry="3.6" fill="#0a1803"></ellipse>
+          <ellipse cx="30.2" cy="24" rx="2.9" ry="3.6" fill="#0a1803"></ellipse>
+          <circle cx="18.9" cy="22.6" r="1" fill="#ffffff"></circle>
+          <circle cx="31.3" cy="22.6" r="1" fill="#ffffff"></circle>
+          <path d="M20.3 31.2c2.2 1.8 5.2 1.8 7.4 0" fill="none" stroke="#0a1803" stroke-width="2.2" stroke-linecap="round"></path>
+        </svg>
+      </span>
+      <div class="brand-text">
+        <h1>Rancho Slime</h1>
+        <p>Slime Rancher 2</p>
+      </div>
+    </div>
+    <button class="ring" id="appbarRing" type="button" data-act="go" data-tab="inicio" aria-label="Ver progreso general">
+      <svg viewBox="0 0 44 44" aria-hidden="true">
+        <circle class="ring-track" cx="22" cy="22" r="18"></circle>
+        <circle class="ring-fill" id="appbarRingFill" cx="22" cy="22" r="18"></circle>
+      </svg>
+      <span id="appbarPct">0%</span>
+    </button>
+  </header>
+
+  <main>
+    <section class="view" id="view-inicio" data-view="inicio" aria-labelledby="title-inicio">
+      <h2 class="sr-only" id="title-inicio">Inicio</h2>
+      <div id="overview"></div>
+    </section>
+
+    <section class="view" id="view-slimes" data-view="slimes" aria-labelledby="title-slimes" hidden>
+      <div class="section-head">
+        <div class="section-title">
+          <h2 id="title-slimes">Slimes</h2>
+          <span class="pill" id="slimesCount">0/0</span>
+        </div>
+        <p>Marca los slimes que ya capturaste.</p>
+      </div>
+      <label class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input id="slimeSearch" type="search" placeholder="Buscar slime, comida o plort" autocomplete="off" enterkeyhint="search" aria-label="Buscar slimes">
+      </label>
+      <div class="chips" id="slimeFilters" role="group" aria-label="Filtrar slimes"></div>
+      <div class="grid" id="slimeList"></div>
+    </section>
+
+    <section class="view" id="view-recursos" data-view="recursos" aria-labelledby="title-recursos" hidden>
+      <div class="section-head">
+        <div class="section-title">
+          <h2 id="title-recursos">Recursos</h2>
+          <span class="pill" id="resourcesCount">0/0</span>
+        </div>
+        <p>Suma lo que ya tienes en el inventario.</p>
+      </div>
+      <div class="chips" id="resourceFilters" role="group" aria-label="Filtrar recursos por zona"></div>
+      <div class="grid" id="resourceList"></div>
+    </section>
+
+    <section class="view" id="view-puertos" data-view="puertos" aria-labelledby="title-puertos" hidden>
+      <div class="section-head">
+        <div class="section-title">
+          <h2 id="title-puertos">Puertos</h2>
+          <span class="pill" id="portsCount">0/0</span>
+        </div>
+        <p>Desbloquea nuevas zonas depositando slimes.</p>
+      </div>
+      <div class="grid" id="portList"></div>
+      <div class="panel panel--tip">
+        <span class="tip-icon" aria-hidden="true">💡</span>
+        <p><b>Consejo:</b> lleva comida de sobra antes de abrir un puerto. Al otro lado te esperan slimes hambrientos.</p>
+      </div>
+    </section>
+
+    <section class="view" id="view-largos" data-view="largos" aria-labelledby="title-largos" hidden>
+      <div class="section-head">
+        <div class="section-title">
+          <h2 id="title-largos">Largos</h2>
+          <span class="pill" id="largosCount">0/0</span>
+        </div>
+        <p>Combina dos slimes y revisa qué necesitas.</p>
+      </div>
+
+      <details class="info">
+        <summary>¿Qué es un Largo?</summary>
+        <p>Un Largo nace al alimentar a un slime con el plort de otro. Produce los plorts de ambos, pero necesita cuidados extra: comida de los dos tipos y, a veces, muros altos o escudo solar.</p>
+      </details>
+
+      <div class="card generator">
+        <h3>Generador de Largos</h3>
+        <p class="muted">Elige dos slimes distintos para ver su riesgo y lo que necesitan.</p>
+        <div class="picker">
+          <div class="field">
+            <label for="largoA">Slime 1</label>
+            <select id="largoA"></select>
+          </div>
+          <button class="swap" type="button" data-act="swap" aria-label="Intercambiar slimes">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4 4 7l3 3"></path><path d="M4 7h12a4 4 0 0 1 4 4"></path><path d="m17 20 3-3-3-3"></path><path d="M20 17H8a4 4 0 0 1-4-4"></path></svg>
+          </button>
+          <div class="field">
+            <label for="largoB">Slime 2</label>
+            <select id="largoB"></select>
+          </div>
+        </div>
+        <button class="btn btn--primary btn--block" type="button" data-act="analyze">Analizar combinación</button>
+        <div id="largoResult" aria-live="polite"></div>
+      </div>
+
+      <div class="panel-head panel-head--section">
+        <h2>Combinaciones recomendadas</h2>
+        <span class="pill" id="largosRecommendedCount">0/0</span>
+      </div>
+      <div class="grid" id="largoList"></div>
+    </section>
+  </main>
+
+  <nav class="tabbar" aria-label="Secciones de la app">
+    <div class="tabbar-inner">
+      <button class="tab active" type="button" data-act="go" data-tab="inicio" aria-current="page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.8 12 3.5l8.5 7.3"></path><path d="M5.5 9.5V20a.5.5 0 0 0 .5.5h4.5v-6h3v6H18a.5.5 0 0 0 .5-.5V9.5"></path></svg>
+        <span>Inicio</span>
+      </button>
+      <button class="tab" type="button" data-act="go" data-tab="slimes">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.2c-4.6 0-8.2 3.9-8.2 8.6 0 2 .9 3.4 2.4 3.4h11.6c1.5 0 2.4-1.4 2.4-3.4 0-4.7-3.6-8.6-8.2-8.6Z"></path><circle cx="9.2" cy="12" r="1" fill="currentColor" stroke="none"></circle><circle cx="14.8" cy="12" r="1" fill="currentColor" stroke="none"></circle></svg>
+        <span>Slimes</span>
+      </button>
+      <button class="tab" type="button" data-act="go" data-tab="recursos">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5Z"></path><path d="m3 13 9 5 9-5"></path></svg>
+        <span>Recursos</span>
+      </button>
+      <button class="tab" type="button" data-act="go" data-tab="puertos">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20.5V11a8 8 0 0 1 16 0v9.5"></path><path d="M4 20.5h16"></path><path d="M9 20.5v-6a3 3 0 0 1 6 0v6"></path></svg>
+        <span>Puertos</span>
+      </button>
+      <button class="tab" type="button" data-act="go" data-tab="largos">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6"></path><path d="M10 3v6.2L5.2 18a1.8 1.8 0 0 0 1.6 2.6h10.4a1.8 1.8 0 0 0 1.6-2.6L14 9.2V3"></path><path d="M7.6 14.5h8.8"></path></svg>
+        <span>Largos</span>
+      </button>
+    </div>
+  </nav>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<dialog class="dialog" id="resetDialog" aria-labelledby="resetTitle">
+  <h2 id="resetTitle">¿Reiniciar todo?</h2>
+  <p>Se borrará tu progreso de slimes, recursos, puertos y largos en este dispositivo. Esta acción no se puede deshacer.</p>
+  <div class="dialog-actions">
+    <button class="btn btn--ghost" type="button" data-act="reset-cancel">Cancelar</button>
+    <button class="btn btn--danger" type="button" data-act="reset-confirm">Sí, reiniciar</button>
+  </div>
+</dialog>
+
+<noscript><p class="noscript">Activa JavaScript para usar la checklist del rancho.</p></noscript>
+<script type="module" src="app.js"></script>
+</body>
+</html>
