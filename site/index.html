@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0b1020" />
+<title>Rancher Checklist 2 · Slime Rancher 2</title>
+<meta name="description" content="Checklist de slimes, recursos y portales de Slime Rancher 2, con recomendaciones de combinaciones de slimes." />
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" href="icon.png" />
+<link rel="apple-touch-icon" href="icon.png" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="app">
+  <header class="hero">
+    <div class="hero-head">
+      <div class="hero-copy">
+        <p class="eyebrow">Slime Rancher 2</p>
+        <h1>Rancher Checklist 2</h1>
+        <p class="lede">Slimes, recursos y portales en una sola lista. Marca tu progreso y deja que la app te diga con qué combinar cada slime.</p>
+      </div>
+      <div class="ring" id="overallRing" role="img" aria-label="Progreso total 0%">
+        <span id="overallPct">0%</span>
+        <small>total</small>
+      </div>
+    </div>
+    <ul class="stats" id="stats"></ul>
+  </header>
+
+  <nav class="tabs" aria-label="Secciones">
+    <button class="tab is-active" type="button" data-view="slimes">🌀 Slimes</button>
+    <button class="tab" type="button" data-view="resources">⛏️ Recursos</button>
+    <button class="tab" type="button" data-view="ports">🚪 Portales</button>
+    <button class="tab" type="button" data-view="combos">🧪 Combinaciones</button>
+  </nav>
+
+  <main>
+    <section class="view" id="view-slimes">
+      <div class="toolbar">
+        <label class="field">
+          <span class="sr-only">Buscar slime</span>
+          <input id="slimeSearch" type="search" placeholder="Buscar slime o zona…" autocomplete="off" />
+        </label>
+        <div class="segmented" id="slimeFilter" role="group" aria-label="Filtrar slimes">
+          <button type="button" data-filter="all" class="is-active">Todos</button>
+          <button type="button" data-filter="captured">Capturados</button>
+          <button type="button" data-filter="pending">Pendientes</button>
+        </div>
+      </div>
+      <p class="hint" id="slimeHint"></p>
+      <div class="grid" id="slimeList"></div>
+    </section>
+
+    <section class="view is-hidden" id="view-resources">
+      <div class="toolbar">
+        <label class="field">
+          <span class="sr-only">Buscar recurso</span>
+          <input id="resourceSearch" type="search" placeholder="Buscar recurso…" autocomplete="off" />
+        </label>
+      </div>
+      <p class="hint" id="resourceHint"></p>
+      <div class="grid" id="resourceList"></div>
+    </section>
+
+    <section class="view is-hidden" id="view-ports">
+      <p class="hint">Lugares y accesos que ya desbloqueaste en tu partida.</p>
+      <div class="grid" id="portList"></div>
+    </section>
+
+    <section class="view is-hidden" id="view-combos">
+      <div class="card">
+        <h2>🧪 Analiza tu combinación</h2>
+        <p class="hint">Elige dos slimes: la app compara dietas, valor de plorts y riesgos del corral.</p>
+        <div class="analyzer-controls">
+          <select id="largoA" aria-label="Primer slime"></select>
+          <span class="plus" aria-hidden="true">+</span>
+          <select id="largoB" aria-label="Segundo slime"></select>
+          <button class="btn primary" id="analyzeBtn" type="button">Analizar</button>
+        </div>
+        <div id="largoResult" class="result" hidden></div>
+      </div>
+
+      <div class="card">
+        <h2>⭐ Combinaciones recomendadas</h2>
+        <p class="hint">Las que mejor rinden: una sola comida por corral y plorts de buen precio.</p>
+        <div class="grid" id="comboList"></div>
+      </div>
+
+      <div class="card">
+        <h2>🤝 ¿Con quién combino…?</h2>
+        <p class="hint">Elige un slime y verás sus tres mejores parejas.</p>
+        <label class="field">
+          <span class="sr-only">Elige un slime</span>
+          <select id="partnerPick" aria-label="Elige un slime"></select>
+        </label>
+        <div class="grid" id="partnerList"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Tu progreso se guarda en este dispositivo.</p>
+    <button class="btn ghost" id="resetBtn" type="button">Borrar progreso</button>
+  </footer>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
